@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import css from './MoviesFilter.module.css';
+import { MoviesFilterProps } from './MoviesFilter.types';
 
-export default function MoviesFilter({ value, onFilter }) {
-  const [query, setQuery] = useState(value);
+export default function MoviesFilter({ value, onFilter }: MoviesFilterProps) {
+  const [query, setQuery] = useState<string>(value);
 
-  const handleSubmit = event => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onFilter(query);
     setQuery('');
   };
 
-  const handleChange = event => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
   };
 

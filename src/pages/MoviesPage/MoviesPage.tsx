@@ -7,16 +7,17 @@ import MoviesList from '../../components/MovieList/MovieList';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 import Loader from '../../components/Loader/Loader';
 import css from './MoviesPage.module.css';
+import { SearchMovies, SearchResult } from '../../commonTypes';
 
 export default function MoviesPage() {
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [movies, setMovies] = useState<SearchMovies[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParam = (searchParams.get('query') ?? '').trim();
 
-  const handleFilterChange = newFilter => {
+  const handleFilterChange = (newFilter: string) => {
     searchParams.set('query', newFilter);
     setSearchParams(searchParams);
   };
@@ -28,7 +29,7 @@ export default function MoviesPage() {
     async function fetchMovies() {
       try {
         setLoading(true);
-        const data = await searchMovies(queryParam);
+        const data: SearchResult = await searchMovies(queryParam);
         setMovies(data.results);
         if (data.total_results === 0) {
           toast.error('Sorry, we did not find movies by such query.', {
@@ -46,8 +47,9 @@ export default function MoviesPage() {
   }, [queryParam]);
 
   const filteredMovies = useMemo(() => {
+    const queryLower = queryParam.toLowerCase();
     return movies.filter(movie =>
-      movie.title.toLowerCase().includes(queryParam.toLowerCase())
+      movie.title.toLowerCase().includes(queryLower)
     );
   }, [queryParam, movies]);
 

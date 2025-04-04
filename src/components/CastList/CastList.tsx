@@ -1,6 +1,7 @@
 import CastCard from '../CastCard/CastCard';
+import { CastListProps } from './CastList.types';
 
-export default function CastList({ cast }) {
+export default function CastList({ cast }: CastListProps) {
   return (
     <ul>
       {cast.map(actor => (

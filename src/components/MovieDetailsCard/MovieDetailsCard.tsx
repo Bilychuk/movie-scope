@@ -1,6 +1,8 @@
+import { Movie } from '../../commonTypes';
 import css from './MovieDetailsCard.module.css';
+import { MovieDetailsCardProps } from './MovieDetailsCard.types';
 
-export default function MovieDetailsCard({ movie }) {
+export default function MovieDetailsCard({ movie }: MovieDetailsCardProps) {
   return (
     <div className={css.info}>
       <img

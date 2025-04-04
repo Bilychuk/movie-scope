@@ -5,25 +5,27 @@ import Loader from '../Loader/Loader';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import ReviewsList from '../ReviewsList/ReviewsList';
 import css from './MovieReviews.module.css';
+import { Review } from '../../commonTypes';
 
 export default function MovieReviews() {
   const { movieId } = useParams();
-  const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
   useEffect(() => {
-    async function fetchReviews() {
-      try {
-        setLoading(true);
-        const data = await getReviews(movieId);
-        setReviews(data.results);
-      } catch (error) {
-        setError(true);
-      } finally {
-        setLoading(false);
+    if (!movieId) {return}
+      async function fetchReviews() {
+        try {
+          setLoading(true);
+          const data = await getReviews(Number(movieId));
+          setReviews(data);
+        } catch (error) {
+          setError(true);
+        } finally {
+          setLoading(false);
+        }
       }
-    }
     fetchReviews();
   }, [movieId]);
 

@@ -1,8 +1,17 @@
 import axios from 'axios';
+import { Cast, Movie, MoviesOfDay, Review, SearchResult } from './commonTypes';
 
 axios.defaults.baseURL = 'https://api.themoviedb.org/3';
 
-const options = {
+interface Options {
+  query: string;
+  language: string;
+  headers: {
+    Authorization: string;
+  };
+}
+
+const options: Options = {
   query: '',
   language: 'en-US',
   headers: {
@@ -11,17 +20,17 @@ const options = {
   },
 };
 
-export const getMovies = async () => {
+export const getMovies = async (): Promise<MoviesOfDay[]> => {
   const response = await axios.get('/trending/movie/day', options);
   return response.data.results;
 };
 
-export const getMovieById = async movieId => {
+export const getMovieById = async (movieId: number): Promise<Movie> => {
   const response = await axios.get(`/movie/${movieId}`, options);
   return response.data;
 };
 
-export const searchMovies = async query => {
+export const searchMovies = async (query: string): Promise<SearchResult> => {
   const searchOptions = {
     ...options,
     params: {
@@ -32,12 +41,12 @@ export const searchMovies = async query => {
   return response.data;
 };
 
-export const getReviews = async movieId => {
+export const getReviews = async (movieId: number): Promise<Review[]> => {
   const response = await axios.get(`/movie/${movieId}/reviews`, options);
-  return response.data;
+  return response.data.results;
 };
 
-export const getCast = async movieId => {
+export const getCast = async (movieId: number): Promise<Cast[]> => {
   const response = await axios.get(`/movie/${movieId}/credits`, options);
   return response.data.cast;
 };

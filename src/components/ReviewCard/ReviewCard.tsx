@@ -1,6 +1,7 @@
 import css from './ReviewCard.module.css';
+import { ReviewCardProps } from './ReviewCard.types';
 
-export default function ReviewCard({ review }) {
+export default function ReviewCard({ review }: ReviewCardProps) {
   return (
     <div>
       <h3 className={css.author}>{review.author}</h3>
