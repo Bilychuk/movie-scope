@@ -28,8 +28,12 @@ export default function HomePage() {
 
   return (
     <div className={css.container}>
-      {error && <ErrorMessage />}
       <h1>Trending today</h1>
+      <p>
+        Check out the latest must-see films – there’s definitely something here
+        for you!
+      </p>
+      {error && <ErrorMessage />}
       {loading && <Loader />}
       {movies.length > 0 && <MovieList moviesOfDay={movies} />}
     </div>

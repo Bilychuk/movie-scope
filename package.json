@@ -1,5 +1,5 @@
 {
-  "name": "goit-react-hw-05",
+  "name": "movie-scope",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,6 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@fontsource/roboto": "^5.2.5",
+    "@mui/icons-material": "^7.0.1",
+    "@mui/material": "^7.0.1",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.6.8",
     "clsx": "^2.1.1",

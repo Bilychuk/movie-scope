@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import css from './MoviesFilter.module.css';
 import { MoviesFilterProps } from './MoviesFilter.types';
+import Button from '@mui/material/Button';
 
 export default function MoviesFilter({ value, onFilter }: MoviesFilterProps) {
   const [query, setQuery] = useState<string>(value);
@@ -24,7 +25,9 @@ export default function MoviesFilter({ value, onFilter }: MoviesFilterProps) {
           value={query}
           onChange={handleChange}
         />
-        <button type="submit">Search</button>
+        <Button type="submit" variant="contained">
+          Search
+        </Button>
       </form>
     </div>
   );

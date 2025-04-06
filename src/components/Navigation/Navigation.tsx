@@ -1,20 +1,28 @@
 import { NavLink } from 'react-router-dom';
-import clsx from 'clsx';
-import css from './Navigation.module.css';
+import { Box } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-const getNavLinkClass = ({ isActive }) => {
-  return clsx(css.link, isActive && css.active);
-};
+const StyledNavLink = styled(NavLink)(({ theme }) => ({
+  textDecoration: 'none',
+  color: theme.palette.text.primary,
+  marginRight: theme.spacing(2),
+  '&.active': {
+    color: '#d21919',
+    fontWeight: 'bold',
+    borderBottom: `2px solid #d21919`,
+  },
+}));
 
 export default function Navigation() {
   return (
-    <nav className={css.nav}>
-      <NavLink to="/" className={getNavLinkClass}>
+    <Box
+      component="nav"
+      sx={{ display: 'flex', alignItems: 'center', padding: 2 }}
+    >
+      <StyledNavLink to="/" end>
         Home
-      </NavLink>
-      <NavLink to="/movies" className={getNavLinkClass}>
-        Movies
-      </NavLink>
-    </nav>
+      </StyledNavLink>
+      <StyledNavLink to="/movies">Movies</StyledNavLink>
+    </Box>
   );
 }
