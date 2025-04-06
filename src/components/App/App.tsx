@@ -1,4 +1,4 @@
-import { lazy, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Layout from '../Layout/Layout';
 import { ThemeProvider, CssBaseline, Box } from '@mui/material';
@@ -17,6 +17,21 @@ const MovieCast = lazy(() => import('../MovieCast/MovieCast'));
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
+
+  const storedTheme = localStorage.getItem('theme');
+
+  useEffect(() => {
+    if (storedTheme === 'dark') {
+      setDarkMode(true);
+    } else if (storedTheme === 'light') {
+      setDarkMode(false);
+    } else {
+      const prefersDark = window.matchMedia(
+        '(prefers-color-scheme: dark)'
+      ).matches;
+      setDarkMode(prefersDark);
+    }
+  }, []);
 
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>

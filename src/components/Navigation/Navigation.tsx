@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 
 const StyledNavLink = styled(NavLink)(({ theme }) => ({
   textDecoration: 'none',
+  fontSize: '24px',
   color: theme.palette.text.primary,
   marginRight: theme.spacing(2),
   '&.active': {

@@ -16,10 +16,12 @@ export default function Layout({
       <AppBar position="static">
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Logo />
-          <Navigation />
-          <IconButton onClick={toggleTheme} color="inherit">
-            {darkMode ? <Brightness7 /> : <Brightness4 />}
-          </IconButton>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Navigation />
+            <IconButton onClick={toggleTheme} color="inherit">
+              {darkMode ? <Brightness7 /> : <Brightness4 />}
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
 

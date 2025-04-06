@@ -20,14 +20,10 @@ export default function Logo() {
           alignItems: 'center',
         }}
       >
-        <img
-          src="/logo.png"
-          alt="MovieScope Logo"
-          style={{ maxHeight: 100, marginRight: 8 }}
-        />
+        <img src="/logo.png" alt="MovieScope Logo" style={{ maxHeight: 90 }} />
         <Typography
-          variant="h6"
           sx={{
+            fontSize: '32px',
             color: 'white',
             fontWeight: 'bold',
             display: { xs: 'none', sm: 'block' },
