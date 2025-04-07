@@ -1,6 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useSelector } from 'react-redux';
+import { selectIsLoggedIn } from '../../redux/auth/selectors';
 
 const StyledNavLink = styled(NavLink)(({ theme }) => ({
   textDecoration: 'none',
@@ -15,6 +17,7 @@ const StyledNavLink = styled(NavLink)(({ theme }) => ({
 }));
 
 export default function Navigation() {
+  const isLoggedIn = useSelector(selectIsLoggedIn);
   return (
     <Box
       component="nav"
@@ -24,6 +27,7 @@ export default function Navigation() {
         Home
       </StyledNavLink>
       <StyledNavLink to="/movies">Movies</StyledNavLink>
+      {isLoggedIn && <StyledNavLink to="/favorites">Favorites</StyledNavLink>}
     </Box>
   );
 }
