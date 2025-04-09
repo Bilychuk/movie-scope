@@ -1,14 +1,23 @@
+import { List, ListItem, Divider, Box } from '@mui/material';
 import ReviewCard from '../ReviewCard/ReviewCard';
-import { ReviewsListProps } from './ReviewsList.types';
+import { useAppSelector } from '../../redux/hooks';
+import { selectReviews } from '../../redux/reviews/selectors';
 
-export default function ReviewsList({ reviews }: ReviewsListProps) {
+export default function ReviewsList() {
+  const reviews = useAppSelector(selectReviews);
+
   return (
-    <ul>
-      {reviews.map(review => (
-        <li key={review.id}>
-          <ReviewCard review={review} />
-        </li>
-      ))}
-    </ul>
+    <Box sx={{ mt: 2 }}>
+      <List disablePadding>
+        {reviews.map((review, index) => (
+          <Box key={review.id}>
+            <ListItem disableGutters>
+              <ReviewCard review={review} />
+            </ListItem>
+            {index < reviews.length - 1 && <Divider />}
+          </Box>
+        ))}
+      </List>
+    </Box>
   );
 }

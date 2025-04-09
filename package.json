@@ -23,6 +23,7 @@
     "@types/redux-persist": "^4.3.1",
     "axios": "^1.6.8",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "formik-mui": "^5.0.0-alpha.1",
     "modern-normalize": "^2.0.0",
     "react": "^18.2.0",

@@ -16,6 +16,7 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { reviewsReducer } from './reviews/slice';
 
 const authPersistConfig = {
   key: 'auth',
@@ -41,6 +42,7 @@ const rootReducer = combineReducers({
   movies: persistReducer(moviesPersistConfig, moviesReducer),
   favorites: favoritesReducer,
   cast: castReducer,
+  reviews: reviewsReducer,
 });
 
 export const store = configureStore({
