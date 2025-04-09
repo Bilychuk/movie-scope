@@ -1,4 +1,4 @@
 export interface PrivateRouteProps {
-  component: React.JSX.Element;
+  component: JSX.Element;
   redirectTo: string;
 }

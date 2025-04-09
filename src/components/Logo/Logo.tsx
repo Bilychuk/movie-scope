@@ -1,37 +1,36 @@
 import { Link } from 'react-router-dom';
-import { Typography } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 
 export default function Logo() {
   return (
-    <Typography
-      variant="h6"
-      component="div"
+    <Box
+      component={Link}
+      to="/"
       sx={{
+        textDecoration: 'none',
         display: 'flex',
         alignItems: 'center',
-        textDecoration: 'none',
+        gap: 1,
+        marginRight: '30px',
       }}
     >
-      <Link
-        to="/"
-        style={{
-          textDecoration: 'none',
-          display: 'flex',
-          alignItems: 'center',
+      <Box
+        component="img"
+        src="/logo.png"
+        alt="MovieScope Logo"
+        sx={{
+          height: { xs: 36, sm: 48, md: 60 },
+        }}
+      />
+      <Typography
+        sx={{
+          fontSize: { xs: '20px', sm: '28px', md: '32px' },
+          color: 'white',
+          fontWeight: 'bold',
         }}
       >
-        <img src="/logo.png" alt="MovieScope Logo" style={{ maxHeight: 90 }} />
-        <Typography
-          sx={{
-            fontSize: '32px',
-            color: 'white',
-            fontWeight: 'bold',
-            display: { xs: 'none', sm: 'block' },
-          }}
-        >
-          MovieScope
-        </Typography>
-      </Link>
-    </Typography>
+        MovieScope
+      </Typography>
+    </Box>
   );
 }

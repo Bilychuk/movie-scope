@@ -5,12 +5,10 @@ import { ThemeProvider, CssBaseline, Box } from '@mui/material';
 import { lightTheme, darkTheme } from '../../theme';
 import PrivateRoute from '../PrivateRoute/PrivateRoute';
 import RestrictedRoute from '../RestrictedRoute/RestrictedRoute';
-import RegisterPage from '../../pages/RegisterPage/RegisterPage';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import { useDispatch } from 'react-redux';
 import { setDarkMode, toggleTheme } from '../../redux/theme/slice';
 import { selectDarkMode } from '../../redux/theme/selectors';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import LoginPage from '../../pages/LoginPage/LoginPage';
 
 const HomePage = lazy(() => import('../../pages/HomePage/HomePage'));
 const MoviesPage = lazy(() => import('../../pages/MoviesPage/MoviesPage'));
@@ -22,14 +20,16 @@ const MovieDetailsPage = lazy(
 );
 const MovieReviews = lazy(() => import('../MovieReviews/MovieReviews'));
 const MovieCast = lazy(() => import('../MovieCast/MovieCast'));
-const LoginPage = lazy(() => import('../../pages/LoginPage/LoginPage'));
 const FavoritesPage = lazy(
   () => import('../../pages/FavoritesPage/FavoritesPage')
 );
+const LoginRedirect = lazy(
+  () => import('../../pages/LoginRedirect/LoginRedirect')
+);
 
 export default function App() {
-  const darkMode = useSelector(selectDarkMode);
-  const dispatch = useDispatch();
+  const darkMode = useAppSelector(selectDarkMode);
+  const dispatch = useAppDispatch();
 
   const storedTheme = localStorage.getItem('theme');
   const handleToggle = () => dispatch(toggleTheme());
@@ -46,7 +46,7 @@ export default function App() {
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <CssBaseline />
       <Box sx={{ p: 2 }}>
-        <Layout darkMode={darkMode} toggleTheme={handleToggle}>
+        <Layout>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/movies" element={<MoviesPage />} />
@@ -55,29 +55,21 @@ export default function App() {
               <Route path="reviews" element={<MovieReviews />} />
             </Route>
             <Route
-              path="/users/signup"
-              element={
-                <RestrictedRoute
-                  component={<RegisterPage />}
-                  redirectTo={'/'}
-                />
-              }
-            />
-            <Route
-              path="/users/login"
-              element={
-                <RestrictedRoute
-                  component={<LoginPage />}
-                  redirectTo={'/favorites'}
-                />
-              }
-            />
-            <Route
-              path="/contacts"
+              path="/favorites"
               element={
                 <PrivateRoute
                   component={<FavoritesPage />}
-                  redirectTo={'/users/login'}
+                  redirectTo="/login"
+                />
+              }
+            />
+            <Route path="/login-redirect" element={<LoginRedirect />} />
+            <Route
+              path="/login"
+              element={
+                <RestrictedRoute
+                  component={<LoginPage />}
+                  redirectTo="/favorites"
                 />
               }
             />

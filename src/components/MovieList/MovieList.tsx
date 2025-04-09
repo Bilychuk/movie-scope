@@ -1,11 +1,13 @@
 import { Link, useLocation } from 'react-router-dom';
-import Card from '@mui/material/Card';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  Grid,
+  Box,
+} from '@mui/material';
 import { MovieListProps } from './MovieList.types';
-import { Grid } from '@mui/material';
-import { Box } from '@mui/system';
 
 export default function MovieList({ moviesOfDay, movies }: MovieListProps) {
   const location = useLocation();
@@ -21,23 +23,55 @@ export default function MovieList({ moviesOfDay, movies }: MovieListProps) {
         sx={{ maxWidth: 1200 }}
       >
         {movieList.map(movie => (
-          <Grid columns={{ xs: 4, sm: 4, md: 3 }} key={movie.id}>
+          <Grid key={movie.id} columns={{ xs: 4, sm: 4, md: 3 }}>
             <Card
               component={Link}
               to={`/movies/${movie.id}`}
               state={location}
-              sx={{ textDecoration: 'none' }}
+              sx={{
+                width: 200,
+                height: '100%',
+                textDecoration: 'none',
+                display: 'flex',
+                flexDirection: 'column',
+                borderRadius: 3,
+                overflow: 'hidden',
+              }}
             >
-              {movie.poster_path && (
-                <CardMedia
-                  component="img"
-                  height="150"
-                  image={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
-                  alt={movie.title}
-                />
-              )}
-              <CardContent>
-                <Typography variant="body1" align="center">
+              <CardMedia
+                component="img"
+                image={
+                  movie.poster_path
+                    ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
+                    : '/no-photo.png'
+                }
+                alt={movie.title}
+                sx={{
+                  width: 200,
+                  height: 300,
+                  objectFit: 'cover',
+                }}
+              />
+              <CardContent
+                sx={{
+                  flexGrow: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  p: 2,
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  align="center"
+                  sx={{
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
                   {movie.title}
                 </Typography>
               </CardContent>

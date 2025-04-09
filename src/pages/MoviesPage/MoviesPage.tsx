@@ -1,21 +1,28 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { searchMovies } from '../../movies-api';
 import toast, { Toaster } from 'react-hot-toast';
 import MoviesFilter from '../../components/MoviesFilter/MoviesFilter';
 import MoviesList from '../../components/MovieList/MovieList';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 import Loader from '../../components/Loader/Loader';
 import css from './MoviesPage.module.css';
-import { SearchMovies, SearchResult } from '../../commonTypes';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import {
+  selectMoviesError,
+  selectMoviesLoading,
+  selectSearchResults,
+} from '../../redux/movies/selectors';
+import { fetchMoviesByQuery } from '../../redux/movies/operations';
+import { SearchMovies } from '../../commonTypes';
 
 export default function MoviesPage() {
-  const [movies, setMovies] = useState<SearchMovies[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
-
+  const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
+
   const queryParam = (searchParams.get('query') ?? '').trim();
+  const movies: SearchMovies[] = useAppSelector(selectSearchResults);
+  const loading = useAppSelector(selectMoviesLoading);
+  const error = useAppSelector(selectMoviesError);
 
   const handleFilterChange = (newFilter: string) => {
     searchParams.set('query', newFilter);
@@ -23,28 +30,19 @@ export default function MoviesPage() {
   };
 
   useEffect(() => {
-    if (queryParam === '') {
-      return;
-    }
-    async function fetchMovies() {
-      try {
-        setLoading(true);
-        const data: SearchResult = await searchMovies(queryParam);
-        setMovies(data.results);
-        if (data.total_results === 0) {
+    if (!queryParam) return;
+
+    dispatch(fetchMoviesByQuery(queryParam))
+      .unwrap()
+      .then(results => {
+        if (results.length === 0) {
           toast.error('Sorry, we did not find movies by such query.', {
             duration: 6000,
             position: 'bottom-right',
           });
         }
-      } catch (error) {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchMovies();
-  }, [queryParam]);
+      });
+  }, [dispatch, queryParam]);
 
   const filteredMovies = useMemo(() => {
     const queryLower = queryParam.toLowerCase();
@@ -61,19 +59,9 @@ export default function MoviesPage() {
       {movies.length > 0 && <MoviesList movies={filteredMovies} />}
       <Toaster
         toastOptions={{
-          style: {
-            color: 'white',
-          },
-          success: {
-            style: {
-              background: 'green',
-            },
-          },
-          error: {
-            style: {
-              background: 'red',
-            },
-          },
+          style: { color: 'white' },
+          success: { style: { background: 'green' } },
+          error: { style: { background: 'red' } },
         }}
       />
     </div>

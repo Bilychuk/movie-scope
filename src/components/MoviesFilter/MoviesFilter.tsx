@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import css from './MoviesFilter.module.css';
 import { MoviesFilterProps } from './MoviesFilter.types';
-import Button from '@mui/material/Button';
+import { TextField, Button, Box } from '@mui/material';
 
 export default function MoviesFilter({ value, onFilter }: MoviesFilterProps) {
   const [query, setQuery] = useState<string>(value);
@@ -17,18 +16,32 @@ export default function MoviesFilter({ value, onFilter }: MoviesFilterProps) {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          className={css.filter}
-          type="text"
-          value={query}
-          onChange={handleChange}
-        />
-        <Button type="submit" variant="contained">
-          Search
-        </Button>
-      </form>
-    </div>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        display: 'flex',
+        gap: 2,
+        justifyContent: 'center',
+        mt: 4,
+      }}
+    >
+      <TextField
+        label="Search movies..."
+        variant="outlined"
+        size="small"
+        value={query}
+        onChange={handleChange}
+        sx={{ width: 300 }}
+      />
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        sx={{ textTransform: 'none' }}
+      >
+        Search
+      </Button>
+    </Box>
   );
 }

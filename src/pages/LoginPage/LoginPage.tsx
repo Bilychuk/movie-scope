@@ -1,11 +1,20 @@
-import LoginForm from '../../components/LoginForm/LoginForm';
-import PageTitle from '../../components/PageTitle/PageTitle';
+import { Box, Typography } from '@mui/material';
+import LoginButton from '../../components/LoginButton/LoginButton';
 
 export default function LoginPage() {
   return (
-    <div>
-      <PageTitle>Please log in</PageTitle>
-      <LoginForm />
-    </div>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        mt: 8,
+      }}
+    >
+      <Typography variant="h4" gutterBottom>
+        Sign in with TMDb
+      </Typography>
+      <LoginButton />
+    </Box>
   );
 }

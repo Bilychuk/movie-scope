@@ -1,5 +1,9 @@
-import { MoviesOfDay, SearchMovies } from '../../commonTypes';
+import { Movie, MoviesOfDay, SearchMovies } from '../../commonTypes';
 
 export interface MoviesState {
-  list: MoviesOfDay | SearchMovies[];
+  trending: MoviesOfDay[];
+  selectedMovie: Movie | null;
+  searchResults: SearchMovies[];
+  loading: boolean;
+  error: string | null;
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getReviews } from '../../movies-api';
+import { getReviews } from '../../api/movies-api';
 import Loader from '../Loader/Loader';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import ReviewsList from '../ReviewsList/ReviewsList';
@@ -14,18 +14,20 @@ export default function MovieReviews() {
   const [error, setError] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!movieId) {return}
-      async function fetchReviews() {
-        try {
-          setLoading(true);
-          const data = await getReviews(Number(movieId));
-          setReviews(data);
-        } catch (error) {
-          setError(true);
-        } finally {
-          setLoading(false);
-        }
+    if (!movieId) {
+      return;
+    }
+    async function fetchReviews() {
+      try {
+        setLoading(true);
+        const data = await getReviews(Number(movieId));
+        setReviews(data);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
       }
+    }
     fetchReviews();
   }, [movieId]);
 

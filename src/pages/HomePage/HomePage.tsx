@@ -1,31 +1,25 @@
-import { getMovies } from '../../movies-api';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import MovieList from '../../components/MovieList/MovieList';
 import Loader from '../../components/Loader/Loader';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
-import css from './HomePage.module.css';
-import { MoviesOfDay } from '../../commonTypes';
 import { Box, Typography, Container } from '@mui/material';
+import { fetchTrendingMovies } from '../../redux/movies/operations';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import {
+  selectMoviesError,
+  selectMoviesLoading,
+  selectTrendingMovies,
+} from '../../redux/movies/selectors';
 
 export default function HomePage() {
-  const [movies, setMovies] = useState<MoviesOfDay[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const movies = useAppSelector(selectTrendingMovies);
+  const loading = useAppSelector(selectMoviesLoading);
+  const error = useAppSelector(selectMoviesError);
 
   useEffect(() => {
-    async function fetchMovies() {
-      try {
-        setLoading(true);
-        const data = await getMovies();
-        setMovies(data);
-      } catch (error) {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchMovies();
-  }, []);
+    dispatch(fetchTrendingMovies());
+  }, [dispatch]);
 
   return (
     <Container maxWidth="md">

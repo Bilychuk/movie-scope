@@ -1,8 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { authReducer } from './auth/slice';
 import { themeReducer } from './theme/slice';
 import { moviesReducer } from './movies/slice';
 import { favoritesReducer } from './favorites/slice';
+import { castReducer } from './cast/slice';
+
 import {
   persistStore,
   persistReducer,
@@ -33,19 +35,16 @@ const moviesPersistConfig = {
   whitelist: ['list'],
 };
 
-const favoritesPersistConfig = {
-  key: 'favorites',
-  storage,
-  whitelist: ['list'],
-};
+const rootReducer = combineReducers({
+  auth: persistReducer(authPersistConfig, authReducer),
+  theme: persistReducer(themePersistConfig, themeReducer),
+  movies: persistReducer(moviesPersistConfig, moviesReducer),
+  favorites: favoritesReducer,
+  cast: castReducer,
+});
 
 export const store = configureStore({
-  reducer: {
-    auth: persistReducer(authPersistConfig, authReducer),
-    theme: persistReducer(themePersistConfig, themeReducer),
-    movies: persistReducer(moviesPersistConfig, moviesReducer),
-    favorites: persistReducer(favoritesPersistConfig, favoritesReducer),
-  },
+  reducer: rootReducer,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
@@ -54,6 +53,7 @@ export const store = configureStore({
     }),
 });
 
+export const persistor = persistStore(store);
+
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-export const persistor = persistStore(store);

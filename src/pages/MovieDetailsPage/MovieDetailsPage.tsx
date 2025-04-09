@@ -1,63 +1,132 @@
-import { useEffect, useState, useRef, Suspense } from 'react';
+import { useEffect, useRef, Suspense } from 'react';
 import { useParams, useLocation, Link, Outlet } from 'react-router-dom';
-import { getMovieById } from '../../movies-api';
-import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import {
+  selectMoviesError,
+  selectMoviesLoading,
+  selectSelectedMovie,
+} from '../../redux/movies/selectors';
+import { fetchMovieById } from '../../redux/movies/operations';
 import Loader from '../../components/Loader/Loader';
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 import MovieDetailsCard from '../../components/MovieDetailsCard/MovieDetailsCard';
-import css from './MovieDetailsPage.module.css';
-import { Movie } from '../../commonTypes';
+import FavoriteButton from '../../components/FavoriteButton/FavoriteButton';
+import { selectIsLoggedIn } from '../../redux/auth/selectors';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import {
+  Box,
+  Typography,
+  Button,
+  List,
+  ListItem,
+  Divider,
+  Paper,
+  useTheme,
+} from '@mui/material';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 export default function MovieDetailsPage() {
   const { movieId } = useParams();
-  const [movie, setMovie] = useState<Movie | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const movie = useAppSelector(selectSelectedMovie);
+  const loading = useAppSelector(selectMoviesLoading);
+  const error = useAppSelector(selectMoviesError);
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
 
   const location = useLocation();
   const backLinkURL = useRef(location.state ?? '/movies');
+  const theme = useTheme();
+  const isDarkMode = theme.palette.mode === 'dark';
 
   useEffect(() => {
-    if (!movieId) {
-      return;
+    if (movieId) {
+      dispatch(fetchMovieById(Number(movieId)));
     }
-    async function fetchMovie() {
-      try {
-        setLoading(true);
-        const data = await getMovieById(Number(movieId));
-        setMovie(data);
-      } catch (error) {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchMovie();
-  }, [movieId]);
+  }, [dispatch, movieId]);
 
   return (
-    <div>
+    <Box sx={{ px: 2, py: 3 }}>
       {loading && <Loader />}
       {error && <ErrorMessage />}
-      <div className={css.homeBtn}>
-        <Link to={backLinkURL.current}>Go back</Link>
-      </div>
-      {movie && <MovieDetailsCard movie={movie} />}
 
-      <div className={css.addInfo}>
-        <p>Additional information</p>
-        <ul>
-          <li>
-            <Link to="cast">Cast</Link>
-          </li>
-          <li>
-            <Link to="reviews">Reviews</Link>
-          </li>
-        </ul>
-      </div>
+      <Box sx={{ mb: 2 }}>
+        <Button
+          component={Link}
+          to={backLinkURL.current}
+          variant="outlined"
+          startIcon={<ArrowBackIcon />}
+        >
+          Go back
+        </Button>
+      </Box>
+
+      {movie && <MovieDetailsCard />}
+      {isLoggedIn && movieId && (
+        <Box sx={{ mt: 2 }}>
+          <FavoriteButton movieId={Number(movieId)} />
+        </Box>
+      )}
+
+      <Box sx={{ mt: 5 }}>
+        <Paper
+          elevation={3}
+          sx={{
+            p: 3,
+            borderRadius: 3,
+            backgroundColor: isDarkMode ? '#1e1e1e' : '#f9f9f9',
+            color: isDarkMode ? '#fff' : 'inherit',
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <InfoOutlinedIcon color="primary" sx={{ mr: 1 }} />
+            <Typography variant="h6" color="primary">
+              Additional Information
+            </Typography>
+          </Box>
+
+          <List>
+            <ListItem disablePadding>
+              <Button
+                component={Link}
+                to="cast"
+                sx={{
+                  fontSize: '20px',
+                  textTransform: 'none',
+                  justifyContent: 'flex-start',
+                  width: '100%',
+                  pl: 0,
+                  color: isDarkMode ? '#90caf9' : 'text.primary',
+                }}
+              >
+                🎭 Cast
+              </Button>
+            </ListItem>
+            <Divider
+              sx={{ my: 1, borderColor: isDarkMode ? '#444' : '#ccc' }}
+            />
+            <ListItem disablePadding>
+              <Button
+                component={Link}
+                to="reviews"
+                sx={{
+                  fontSize: '20px',
+                  textTransform: 'none',
+                  justifyContent: 'flex-start',
+                  width: '100%',
+                  pl: 0,
+                  color: isDarkMode ? '#90caf9' : 'text.primary',
+                }}
+              >
+                📝 Reviews
+              </Button>
+            </ListItem>
+          </List>
+        </Paper>
+      </Box>
 
       <Suspense fallback={<Loader />}>
         <Outlet />
       </Suspense>
-    </div>
+    </Box>
   );
 }

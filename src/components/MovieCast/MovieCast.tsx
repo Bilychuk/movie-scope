@@ -1,32 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getCast } from '../../movies-api';
 import Loader from '../Loader/Loader';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import CastList from '../CastList/CastList';
-import { Cast } from '../../commonTypes';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import {
+  selectCast,
+  selectCastError,
+  selectCastLoading,
+} from '../../redux/cast/selectors';
+import { fetchCast } from '../../redux/cast/slice';
 
 export default function MovieCast() {
   const { movieId } = useParams();
-  const [cast, setCast] = useState<Cast[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
+  const cast = useAppSelector(selectCast);
+  const loading = useAppSelector(selectCastLoading);
+  const error = useAppSelector(selectCastError);
   useEffect(() => {
-    if (!movieId) return;
-    async function fetchCast() {
-      try {
-        setLoading(true);
-        const data = await getCast(Number(movieId));
-        setCast(data);
-      } catch (error) {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
+    if (movieId) {
+      dispatch(fetchCast(Number(movieId)));
     }
-    fetchCast();
-  }, [movieId]);
+  }, [dispatch, movieId]);
+
   return (
     <div>
       {loading && <Loader />}

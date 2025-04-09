@@ -1,20 +1,53 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import {
+  fetchTrendingMovies,
+  fetchMovieById,
+  fetchMoviesByQuery,
+} from './operations';
 import { MoviesState } from './movies.types';
-import { MoviesOfDay, SearchMovies } from '../../commonTypes';
 
 const initialState: MoviesState = {
-  list: [],
+  trending: [],
+  selectedMovie: null,
+  searchResults: [],
+  loading: false,
+  error: null,
 };
 
 const moviesSlice = createSlice({
   name: 'movies',
   initialState,
-  reducers: {
-    setMovies(state, action: PayloadAction<MoviesOfDay | SearchMovies[]>) {
-      state.list = action.payload;
-    },
+  reducers: {},
+  extraReducers: builder => {
+    builder
+      .addCase(fetchTrendingMovies.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchTrendingMovies.fulfilled, (state, action) => {
+        state.trending = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchTrendingMovies.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(fetchMovieById.fulfilled, (state, action) => {
+        state.selectedMovie = action.payload;
+      })
+      .addCase(fetchMoviesByQuery.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchMoviesByQuery.fulfilled, (state, action) => {
+        state.loading = false;
+        state.searchResults = action.payload;
+      })
+      .addCase(fetchMoviesByQuery.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 
-export const { setMovies } = moviesSlice.actions;
 export const moviesReducer = moviesSlice.reducer;

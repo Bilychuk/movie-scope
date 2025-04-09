@@ -1,8 +1,13 @@
-export interface FavoriteMovie {
-  id: string;
-  title: string;
-}
+import { Movie } from '../../commonTypes';
 
 export interface FavoritesState {
-  list: FavoriteMovie[];
+  items: Movie[];
+  loading: boolean;
+  error: string | null;
+}
+export interface ToggleFavoritePayload {
+  sessionId: string;
+  accountId: number;
+  movieId: number;
+  isFavorite: boolean;
 }
