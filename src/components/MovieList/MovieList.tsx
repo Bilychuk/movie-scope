@@ -9,9 +9,8 @@ import {
 } from '@mui/material';
 import { MovieListProps } from './MovieList.types';
 
-export default function MovieList({ moviesOfDay, movies }: MovieListProps) {
+export default function MovieList({ movies }: MovieListProps) {
   const location = useLocation();
-  const movieList = moviesOfDay ?? movies ?? [];
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
@@ -22,62 +21,63 @@ export default function MovieList({ moviesOfDay, movies }: MovieListProps) {
         justifyContent="center"
         sx={{ maxWidth: 1200 }}
       >
-        {movieList.map(movie => (
-          <Grid key={movie.id} columns={{ xs: 4, sm: 4, md: 3 }}>
-            <Card
-              component={Link}
-              to={`/movies/${movie.id}`}
-              state={location}
-              sx={{
-                width: 200,
-                height: '100%',
-                textDecoration: 'none',
-                display: 'flex',
-                flexDirection: 'column',
-                borderRadius: 3,
-                overflow: 'hidden',
-              }}
-            >
-              <CardMedia
-                component="img"
-                image={
-                  movie.poster_path
-                    ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
-                    : '/no-photo.png'
-                }
-                alt={movie.title}
+        {movies &&
+          movies.map(movie => (
+            <Grid key={movie.id} columns={{ xs: 4, sm: 4, md: 3 }}>
+              <Card
+                component={Link}
+                to={`/movies/${movie.id}`}
+                state={location}
                 sx={{
                   width: 200,
-                  height: 300,
-                  objectFit: 'cover',
-                }}
-              />
-              <CardContent
-                sx={{
-                  flexGrow: 1,
+                  height: '100%',
+                  textDecoration: 'none',
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  p: 2,
+                  flexDirection: 'column',
+                  borderRadius: 3,
+                  overflow: 'hidden',
                 }}
               >
-                <Typography
-                  variant="body2"
-                  align="center"
+                <CardMedia
+                  component="img"
+                  image={
+                    movie.poster_path
+                      ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
+                      : '/no-photo.png'
+                  }
+                  alt={movie.title}
                   sx={{
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
+                    width: 200,
+                    height: 300,
+                    objectFit: 'cover',
+                  }}
+                />
+                <CardContent
+                  sx={{
+                    flexGrow: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    p: 2,
                   }}
                 >
-                  {movie.title}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
+                  <Typography
+                    variant="body2"
+                    align="center"
+                    sx={{
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    {movie.title}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
       </Grid>
     </Box>
   );

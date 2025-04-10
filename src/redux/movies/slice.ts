@@ -17,7 +17,11 @@ const initialState: MoviesState = {
 const moviesSlice = createSlice({
   name: 'movies',
   initialState,
-  reducers: {},
+  reducers: {
+    clearSelectedMovie: state => {
+      state.selectedMovie = null;
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchTrendingMovies.pending, state => {
@@ -32,8 +36,17 @@ const moviesSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
+      .addCase(fetchMovieById.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(fetchMovieById.fulfilled, (state, action) => {
         state.selectedMovie = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchMovieById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       })
       .addCase(fetchMoviesByQuery.pending, state => {
         state.loading = true;
@@ -51,3 +64,4 @@ const moviesSlice = createSlice({
 });
 
 export const moviesReducer = moviesSlice.reducer;
+export const { clearSelectedMovie } = moviesSlice.actions;

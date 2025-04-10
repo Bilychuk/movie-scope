@@ -23,6 +23,7 @@ export default function HomePage() {
 
   return (
     <Container maxWidth="md">
+      {error && <ErrorMessage />}
       <Box my={4}>
         <Typography
           variant="h4"
@@ -40,9 +41,10 @@ export default function HomePage() {
           Check out the latest must-see films – there’s definitely something
           here for you!
         </Typography>
-        {error && <ErrorMessage />}
         {loading && <Loader />}
-        {movies.length > 0 && <MovieList moviesOfDay={movies} />}
+        {!loading && !error && movies.length > 0 && (
+          <MovieList movies={movies} />
+        )}
       </Box>
     </Container>
   );

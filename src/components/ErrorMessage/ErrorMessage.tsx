@@ -1,9 +1,9 @@
-import css from './ErrorMessage.module.css';
+import { Typography } from '@mui/material';
 
 export default function ErrorMessage() {
   return (
-    <h2 className={css.error}>
+    <Typography variant="h6" color="error" align="center" sx={{ mt: 4 }}>
       Failed to load movie details. Please reload or try again later.
-    </h2>
+    </Typography>
   );
 }

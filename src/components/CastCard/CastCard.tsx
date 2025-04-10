@@ -1,4 +1,4 @@
-import { Card, CardContent, CardMedia, Typography } from '@mui/material';
+import { Card, CardContent, CardMedia, Typography, Box } from '@mui/material';
 import { CastCardProps } from './CastCard.types';
 
 export default function CastCard({ actor }: CastCardProps) {
@@ -10,25 +10,49 @@ export default function CastCard({ actor }: CastCardProps) {
     <Card
       sx={{
         maxWidth: 200,
+        height: 360,
         borderRadius: 4,
         boxShadow: 3,
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
+        transition: 'transform 0.2s ease-in-out',
+        '&:hover': {
+          transform: 'scale(1.05)',
+        },
       }}
     >
       <CardMedia
         component="img"
-        height="270"
         image={imageUrl}
         alt={actor.name}
-        sx={{ objectFit: 'cover' }}
+        sx={{
+          height: 270,
+          objectFit: 'cover',
+        }}
       />
-      <CardContent>
-        <Typography variant="subtitle1" fontWeight={600}>
+      <CardContent
+        sx={{
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography
+          variant="subtitle1"
+          fontWeight={600}
+          noWrap
+          title={actor.name}
+        >
           {actor.name}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          noWrap
+          title={actor.character}
+        >
           Character: {actor.character}
         </Typography>
       </CardContent>

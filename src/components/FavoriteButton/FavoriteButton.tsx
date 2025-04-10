@@ -2,17 +2,27 @@ import { Button } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { toggleFavoriteMovie } from '../../redux/favorites/operations';
+import {
+  getFavoriteMovies,
+  toggleFavoriteMovie,
+} from '../../redux/favorites/operations';
 import { selectSessionId, selectAccountId } from '../../redux/auth/selectors';
 import { selectFavorites } from '../../redux/favorites/selectors';
 import { FavoriteButtonProps } from './FavoriteButton.types';
 import { Movie } from '../../commonTypes';
+import { useEffect } from 'react';
 
 export default function FavoriteButton({ movieId }: FavoriteButtonProps) {
   const dispatch = useAppDispatch();
   const sessionId = useAppSelector(selectSessionId);
   const accountId = useAppSelector(selectAccountId);
   const favorites = useAppSelector(selectFavorites) as Movie[];
+
+  useEffect(() => {
+    if (sessionId) {
+      dispatch(getFavoriteMovies(sessionId));
+    }
+  }, [dispatch, sessionId]);
 
   const isFavorite = favorites.some(movie => movie.id === movieId);
 

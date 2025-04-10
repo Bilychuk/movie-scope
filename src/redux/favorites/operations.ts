@@ -51,3 +51,28 @@ export const toggleFavoriteMovie = createAsyncThunk<
     return thunkAPI.rejectWithValue((error as Error).message);
   }
 });
+
+export const removeFavoriteMovie = createAsyncThunk<
+  void,
+  ToggleFavoritePayload
+>('favorites/removeFavoriteMovie', async (data, thunkAPI) => {
+  try {
+    const { sessionId, accountId, movieId } = data;
+
+    await tmdbApi.post(
+      `/account/${accountId}/favorite`,
+      {
+        media_type: 'movie',
+        media_id: movieId,
+        favorite: false,
+      },
+      {
+        params: { session_id: sessionId },
+      }
+    );
+
+    thunkAPI.dispatch(getFavoriteMovies(sessionId));
+  } catch (error) {
+    return thunkAPI.rejectWithValue((error as Error).message);
+  }
+});

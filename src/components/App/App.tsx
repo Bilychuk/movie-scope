@@ -5,10 +5,10 @@ import { ThemeProvider, CssBaseline, Box } from '@mui/material';
 import { lightTheme, darkTheme } from '../../theme';
 import PrivateRoute from '../PrivateRoute/PrivateRoute';
 import RestrictedRoute from '../RestrictedRoute/RestrictedRoute';
-import { setDarkMode, toggleTheme } from '../../redux/theme/slice';
 import { selectDarkMode } from '../../redux/theme/selectors';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import LoginPage from '../../pages/LoginPage/LoginPage';
+import { setDarkMode } from '../../redux/theme/slice';
 
 const HomePage = lazy(() => import('../../pages/HomePage/HomePage'));
 const MoviesPage = lazy(() => import('../../pages/MoviesPage/MoviesPage'));
@@ -31,52 +31,45 @@ export default function App() {
   const darkMode = useAppSelector(selectDarkMode);
   const dispatch = useAppDispatch();
 
-  const storedTheme = localStorage.getItem('theme');
-  const handleToggle = () => dispatch(toggleTheme());
-
   useEffect(() => {
+    const storedTheme = localStorage.getItem('theme');
     if (storedTheme === 'dark') {
-      dispatch(setDarkMode(false));
-    } else if (storedTheme === 'light') {
       dispatch(setDarkMode(true));
+    } else if (storedTheme === 'light') {
+      dispatch(setDarkMode(false));
     }
-  }, [dispatch, storedTheme]);
+  }, [dispatch]);
 
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <CssBaseline />
-      <Box sx={{ p: 2 }}>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/movies" element={<MoviesPage />} />
-            <Route path="/movies/:movieId" element={<MovieDetailsPage />}>
-              <Route path="cast" element={<MovieCast />} />
-              <Route path="reviews" element={<MovieReviews />} />
-            </Route>
-            <Route
-              path="/favorites"
-              element={
-                <PrivateRoute
-                  component={<FavoritesPage />}
-                  redirectTo="/login"
-                />
-              }
-            />
-            <Route path="/login-redirect" element={<LoginRedirect />} />
-            <Route
-              path="/login"
-              element={
-                <RestrictedRoute
-                  component={<LoginPage />}
-                  redirectTo="/favorites"
-                />
-              }
-            />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </Layout>
-      </Box>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/movies" element={<MoviesPage />} />
+          <Route path="/movies/:movieId" element={<MovieDetailsPage />}>
+            <Route path="cast" element={<MovieCast />} />
+            <Route path="reviews" element={<MovieReviews />} />
+          </Route>
+          <Route
+            path="/favorites"
+            element={
+              <PrivateRoute component={<FavoritesPage />} redirectTo="/login" />
+            }
+          />
+          <Route path="/login-redirect" element={<LoginRedirect />} />
+          <Route
+            path="/login"
+            element={
+              <RestrictedRoute
+                component={<LoginPage />}
+                redirectTo="/favorites"
+              />
+            }
+          />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Layout>
     </ThemeProvider>
   );
 }

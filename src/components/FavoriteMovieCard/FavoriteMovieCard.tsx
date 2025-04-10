@@ -1,32 +1,45 @@
 import {
-  Card,
   CardMedia,
   CardContent,
   CardActions,
   Typography,
   IconButton,
+  Card,
 } from '@mui/material';
 import { Delete } from '@mui/icons-material';
-import { Movie } from '../../commonTypes';
 import { Link, useLocation } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { selectAccountId, selectSessionId } from '../../redux/auth/selectors';
+import { removeFavoriteMovie } from '../../redux/favorites/operations';
+import { FavoriteMovieCardProps } from './FavoriteMovieCard.types';
 
-interface FavoriteMovieCardProps {
-  movie: Movie;
-  onRemove: (movieId: number) => void;
-}
-
-export default function FavoriteMovieCard({
-  movie,
-  onRemove,
-}: FavoriteMovieCardProps) {
+export default function FavoriteMovieCard({ movie }: FavoriteMovieCardProps) {
   const location = useLocation();
+  const dispatch = useAppDispatch();
+  const sessionId = useAppSelector(selectSessionId);
+  const accountId = useAppSelector(selectAccountId);
+
+  const imageUrl = movie.poster_path
+    ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
+    : '/no-photo.png';
+
+  const handleRemove = (movieId: number) => {
+    if (!sessionId || !accountId) return;
+    dispatch(
+      removeFavoriteMovie({ sessionId, accountId, movieId, isFavorite: false })
+    );
+  };
+
   return (
     <Card
       sx={{
+        width: 200,
         height: '100%',
+        textDecoration: 'none',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        borderRadius: 3,
+        overflow: 'hidden',
       }}
     >
       <Link
@@ -36,11 +49,23 @@ export default function FavoriteMovieCard({
       >
         <CardMedia
           component="img"
-          height="350"
-          image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+          sx={{
+            width: 200,
+            height: 300,
+            objectFit: 'cover',
+          }}
+          image={imageUrl}
           alt={movie.title}
         />
-        <CardContent sx={{ flexGrow: 1 }}>
+        <CardContent
+          sx={{
+            flexGrow: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            p: 2,
+          }}
+        >
           <Typography
             variant="h6"
             gutterBottom
@@ -52,9 +77,8 @@ export default function FavoriteMovieCard({
           </Typography>
         </CardContent>
       </Link>
-
       <CardActions sx={{ justifyContent: 'center', mt: 'auto' }}>
-        <IconButton color="error" onClick={() => onRemove(movie.id)}>
+        <IconButton color="error" onClick={() => handleRemove(movie.id)}>
           <Delete />
         </IconButton>
       </CardActions>

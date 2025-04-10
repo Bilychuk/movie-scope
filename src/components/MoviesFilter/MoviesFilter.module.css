@@ -1,7 +1,0 @@
-.filter {
-  outline: none;
-}
-.filter:hover,
-.filter:focus {
-  border: 3px solid cornflowerblue;
-}

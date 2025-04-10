@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getFavoriteMovies } from './operations';
+import { getFavoriteMovies, removeFavoriteMovie } from './operations';
 import { FavoritesState } from './favorites.types';
 
 const initialState: FavoritesState = {
@@ -23,6 +23,20 @@ const favoritesSlice = createSlice({
         state.error = null;
       })
       .addCase(getFavoriteMovies.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(removeFavoriteMovie.pending, state => {
+        state.loading = true;
+      })
+      .addCase(removeFavoriteMovie.fulfilled, (state, action) => {
+        state.items = state.items.filter(
+          movie => movie.id !== action.meta.arg.movieId
+        );
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(removeFavoriteMovie.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

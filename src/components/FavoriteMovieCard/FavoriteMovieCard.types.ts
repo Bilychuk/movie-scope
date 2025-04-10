@@ -1,5 +1,5 @@
 import { Movie } from '../../commonTypes';
 
-export interface MovieDetailsCardProps {
+export interface FavoriteMovieCardProps {
   movie: Movie;
 }

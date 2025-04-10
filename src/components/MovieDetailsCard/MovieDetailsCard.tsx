@@ -17,6 +17,10 @@ export default function MovieDetailsCard() {
 
   if (!movie) return null;
 
+  const imageUrl = movie.poster_path
+    ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
+    : '/no-photo.png';
+
   return (
     <Card
       sx={{
@@ -35,8 +39,10 @@ export default function MovieDetailsCard() {
           width: { xs: '100%', md: 300 },
           borderRadius: 2,
           objectFit: 'cover',
+          aspectRatio: '2 / 3',
+          backgroundColor: '#ccc',
         }}
-        image={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+        image={imageUrl}
         alt={movie.title}
       />
 

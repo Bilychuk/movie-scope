@@ -5,7 +5,6 @@ import MoviesFilter from '../../components/MoviesFilter/MoviesFilter';
 import MoviesList from '../../components/MovieList/MovieList';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 import Loader from '../../components/Loader/Loader';
-import css from './MoviesPage.module.css';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
   selectMoviesError,
@@ -52,11 +51,13 @@ export default function MoviesPage() {
   }, [queryParam, movies]);
 
   return (
-    <div className={css.wrapper}>
+    <>
       <MoviesFilter value={queryParam} onFilter={handleFilterChange} />
       {error && <ErrorMessage />}
       {loading && <Loader />}
-      {movies.length > 0 && <MoviesList movies={filteredMovies} />}
+      {!loading && !error && movies.length > 0 && (
+        <MoviesList movies={filteredMovies} />
+      )}
       <Toaster
         toastOptions={{
           style: { color: 'white' },
@@ -64,6 +65,6 @@ export default function MoviesPage() {
           error: { style: { background: 'red' } },
         }}
       />
-    </div>
+    </>
   );
 }

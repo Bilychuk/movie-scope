@@ -6,7 +6,6 @@ import {
   IconButton,
   Box,
   useMediaQuery,
-  useTheme,
 } from '@mui/material';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
 import Logo from '../Logo/Logo';
@@ -21,7 +20,6 @@ export default function AppBar() {
   const darkMode = useAppSelector(selectDarkMode);
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
-  const theme = useTheme();
   const isMobile = useMediaQuery('(max-width:767px)');
 
   return (
@@ -44,7 +42,11 @@ export default function AppBar() {
             <Navigation />
             {!isLoggedIn && <LoginButton />}
             {isLoggedIn && <LogoutButton />}
-            <IconButton onClick={() => dispatch(toggleTheme())} color="inherit">
+            <IconButton
+              onClick={() => dispatch(toggleTheme())}
+              color="inherit"
+              aria-label="toggle theme"
+            >
               {darkMode ? <Brightness7 /> : <Brightness4 />}
             </IconButton>
           </Box>

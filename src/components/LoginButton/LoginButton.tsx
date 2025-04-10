@@ -1,6 +1,7 @@
 import { useAppDispatch } from '../../redux/hooks';
 import { getRequestToken } from '../../redux/auth/operations';
 import { Button } from '@mui/material';
+import LoginIcon from '@mui/icons-material/Login';
 
 export default function LoginButton() {
   const dispatch = useAppDispatch();
@@ -14,7 +15,20 @@ export default function LoginButton() {
   };
 
   return (
-    <Button color="inherit" onClick={handleLogin}>
+    <Button
+      variant="contained"
+      sx={{
+        backgroundColor: '#90caf9',
+        borderRadius: 2,
+        color: '#000',
+        fontWeight: 600,
+        '&:hover': {
+          backgroundColor: '#64b5f6',
+        },
+      }}
+      startIcon={<LoginIcon />}
+      onClick={handleLogin}
+    >
       Log In
     </Button>
   );

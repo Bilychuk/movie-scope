@@ -1,19 +1,22 @@
-import css from './Loader.module.css';
 import { Oval } from 'react-loader-spinner';
+import { Box } from '@mui/material';
 
 export default function Loader() {
   return (
-    <div className={css.loader}>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="200px"
+    >
       <Oval
         visible={true}
-        height="40"
-        width="40"
+        height={40}
+        width={40}
         color="#ff1b1e"
-        ariaLabel="oval-loading"
-        wrapperStyle={{}}
-        wrapperClass=""
         secondaryColor="#ff1b1e"
+        ariaLabel="oval-loading"
       />
-    </div>
+    </Box>
   );
 }

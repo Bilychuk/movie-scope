@@ -10,6 +10,7 @@ import {
   selectCastLoading,
 } from '../../redux/cast/selectors';
 import { fetchCast } from '../../redux/cast/slice';
+import { Box, Typography } from '@mui/material';
 
 export default function MovieCast() {
   const { movieId } = useParams();
@@ -28,8 +29,14 @@ export default function MovieCast() {
     <div>
       {loading && <Loader />}
       {error && <ErrorMessage />}
-      {cast.length === 0 && <b>No cast info</b>}
-      {cast.length > 0 && <CastList cast={cast} />}
+      {!loading && !error && cast.length === 0 && (
+        <Box sx={{ textAlign: 'center', py: 4 }}>
+          <Typography variant="h6" color="text.secondary">
+            No cast info available.
+          </Typography>
+        </Box>
+      )}
+      {cast.length > 0 && <CastList />}
     </div>
   );
 }
