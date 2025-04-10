@@ -58,15 +58,16 @@ export default function MovieDetailsPage() {
           Go back
         </Button>
       </Box>
+
       {loading && <Loader />}
       {error && <ErrorMessage />}
-      {isLoggedIn && movie && (
+
+      {movie && (
         <>
           <Box sx={{ mt: 2 }}>
             <MovieDetailsCard />
-            <FavoriteButton movieId={Number(movieId)} />
+            {isLoggedIn && <FavoriteButton movieId={Number(movieId)} />}
           </Box>
-
           <Box sx={{ mt: 5 }}>
             <Paper
               elevation={3}

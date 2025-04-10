@@ -9,7 +9,7 @@ import {
   selectCastError,
   selectCastLoading,
 } from '../../redux/cast/selectors';
-import { fetchCast } from '../../redux/cast/slice';
+import { clearSelectedCasts, fetchCast } from '../../redux/cast/slice';
 import { Box, Typography } from '@mui/material';
 
 export default function MovieCast() {
@@ -21,6 +21,7 @@ export default function MovieCast() {
   const error = useAppSelector(selectCastError);
   useEffect(() => {
     if (movieId) {
+      dispatch(clearSelectedCasts());
       dispatch(fetchCast(Number(movieId)));
     }
   }, [dispatch, movieId]);

@@ -11,7 +11,11 @@ const initialState: ReviewsState = {
 export const reviewsSlice = createSlice({
   name: 'reviews',
   initialState,
-  reducers: {},
+  reducers: {
+    clearSelectedReviews: state => {
+      state.items = [];
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchReviewsByMovieId.pending, state => {
@@ -30,3 +34,4 @@ export const reviewsSlice = createSlice({
 });
 
 export const reviewsReducer = reviewsSlice.reducer;
+export const { clearSelectedReviews } = reviewsSlice.actions;

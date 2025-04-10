@@ -11,6 +11,7 @@ import {
 } from '../../redux/reviews/selectors';
 import { fetchReviewsByMovieId } from '../../redux/reviews/operations';
 import { Box, Typography } from '@mui/material';
+import { clearSelectedReviews } from '../../redux/reviews/slice';
 
 export default function MovieReviews() {
   const { movieId } = useParams();
@@ -22,6 +23,7 @@ export default function MovieReviews() {
 
   useEffect(() => {
     if (movieId) {
+      dispatch(clearSelectedReviews());
       dispatch(fetchReviewsByMovieId(Number(movieId)));
     }
   }, [dispatch, movieId]);

@@ -24,7 +24,11 @@ export const fetchCast = createAsyncThunk<Cast[], number>(
 const castSlice = createSlice({
   name: 'cast',
   initialState,
-  reducers: {},
+  reducers: {
+    clearSelectedCasts: state => {
+      state.cast = [];
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchCast.pending, state => {
@@ -43,3 +47,4 @@ const castSlice = createSlice({
 });
 
 export const castReducer = castSlice.reducer;
+export const { clearSelectedCasts } = castSlice.actions;
