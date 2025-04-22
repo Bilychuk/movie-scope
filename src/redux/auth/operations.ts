@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { tmdbApi } from '../../api/tmdbApi';
+import { tmdbApi, tmdbAuthApi } from '../../api/tmdbApi';
 
 export const getRequestToken = createAsyncThunk<
   string,
@@ -22,19 +22,22 @@ export const createSessionId = createAsyncThunk<
   { rejectValue: string }
 >('auth/createSessionId', async (requestToken, thunkAPI) => {
   try {
-    const sessionRes = await tmdbApi.post('/authentication/session/new', {
+    const sessionRes = await tmdbAuthApi.post('/authentication/session/new', {
       request_token: requestToken,
     });
 
     const sessionId = sessionRes.data.session_id;
 
-    const accountRes = await tmdbApi.get('/account', {
+    const accountRes = await tmdbAuthApi.get('/account', {
       params: {
         session_id: sessionId,
       },
     });
 
     const accountId = accountRes.data.id;
+    if (!accountId) {
+  return thunkAPI.rejectWithValue('Account ID not found');
+}
 
     return { sessionId, accountId };
   } catch (error) {
