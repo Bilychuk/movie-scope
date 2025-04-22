@@ -10,32 +10,34 @@ export default function LoginRedirect() {
 
   const hasRunRef = useRef(false);
 
-  useEffect(() => {
-     if (hasRunRef.current) return;
+ useEffect(() => {
+  if (hasRunRef.current) return;
   hasRunRef.current = true;
-    const token = params.get('request_token');
-    const approved = params.get('approved');
 
-    const existingSession = localStorage.getItem('session_id');
+  const token = params.get('request_token');
+  const approved = params.get('approved') === 'true';
+  const existingSession = localStorage.getItem('session_id');
 
-    if (token && approved === 'true') {
-      if (existingSession) {
-        navigate('/');
-        return;
-      }
+  if (!token || !approved) {
+    navigate('/login');
+    return;
+  }
 
-      dispatch(createSessionId(token))
-        .unwrap()
-        .then(() => {
-          navigate('/');
-        })
-        .catch(error => {
-          navigate('/login');
-        });
-    } else {
+  if (existingSession) {
+    navigate('/');
+    return;
+  }
+
+  dispatch(createSessionId(token))
+    .unwrap()
+    .then(() => {
+      navigate('/');
+    })
+    .catch(() => {
+      localStorage.removeItem('session_id');
       navigate('/login');
-    }
-  }, [dispatch, params, navigate]);
+    });
+}, [dispatch, params, navigate]);
 
   return null;
 }

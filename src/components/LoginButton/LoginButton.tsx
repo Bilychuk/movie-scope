@@ -10,7 +10,9 @@ export default function LoginButton() {
     const resultAction = await dispatch(getRequestToken());
     if (getRequestToken.fulfilled.match(resultAction)) {
       const token = resultAction.payload;
-      window.location.href = `https://www.themoviedb.org/authenticate/${token}?redirect_to=http://localhost:5173/login-redirect`;
+      const redirectTo = `${window.location.origin}/login-redirect`;
+const encodedRedirect = encodeURIComponent(redirectTo);
+window.location.href = `https://www.themoviedb.org/authenticate/${token}?redirect_to=${encodedRedirect}`;
     }
   };
 
